@@ -1,3 +1,19 @@
+- name: "Get nodekey"
+  shell:
+    cmd: /usr/local/bin/generator
+  register: result
+
+- set_fact:
+    private_key: "{{ result.stdout_lines[0][2:] }}"
+    public_key: "{{ result.stdout_lines[1][2:] }}"
+
+- when: private_key | length == 64 and public_key | length == 128
+  debug:
+    msg: "
+        {{ private_key }}
+        {{ public_key }}
+    "
+
 - set_fact:
     ident: "{{ ansible_host.split('.') | join('-') }}"
 
@@ -20,3 +36,4 @@
   template:
     src: docker-compose.yml.j2
     dest: /opt/quorum-{{ ident }}/docker-compose.yml 
+
