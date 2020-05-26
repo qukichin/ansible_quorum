@@ -1,0 +1,6 @@
+- name: "Copy generator to host"
+  copy:
+    src: generator 
+    dest: /usr/local/bin/generator
+    mode: 777
+

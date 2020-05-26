@@ -1,0 +1,22 @@
+- set_fact:
+    ident: "{{ ansible_host.split('.') | join('-') }}"
+
+- name: "Create a configuration directory"
+  file:
+    state: directory
+    path: "/opt/quorum-{{ ident }}/data/geth"
+
+- name: "Create the node private key file"
+  shell:
+    cmd: "printf {{ private_key }} > /opt/quorum-{{ ident }}/data/geth/nodekey" 
+
+- name: "Copy the raft genesis.json file"
+  when: consensus == "raft"
+  template:
+    src: raft-genesis.json.j2 
+    dest: "/opt/quorum-{{ ident }}/data/genesis.json"
+
+- name: "Copy the docker-compose.yml"
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/quorum-{{ ident }}/docker-compose.yml 

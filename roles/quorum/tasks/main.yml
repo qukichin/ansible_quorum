@@ -1,0 +1,6 @@
+- import_tasks: copy-generator.yml
+
+- import_tasks: get-key.yml
+
+- import_tasks: starting-quorum.yml
+

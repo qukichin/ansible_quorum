@@ -1,0 +1,11 @@
+chainID: 10000
+difficulty: "0x0"
+gasLimit: "0xE0000000"
+consensus: raft
+image: quorumengineering/quorum:2.5.0
+ports:
+  raft: 22000
+  rpc: 50000
+  listen: 21000
+env:
+  - PRIVATE_CONFIG=ignore

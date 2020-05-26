@@ -1,0 +1,4 @@
+---
+- hosts: quorum
+  roles:
+    - role: quorum

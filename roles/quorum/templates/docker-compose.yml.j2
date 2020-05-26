@@ -1,0 +1,36 @@
+version: "3"
+services:
+  quorum-{{ ident }}:
+    image: {{ image }}
+    container_name: quorum-{{ ident }}
+    hostname: quorum-{{ ident }}
+    restart: always
+    network_mode: host
+    environment:
+{% for i in env %}
+      - {{ i }}
+{% endfor %}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/quorum-{{ ident }}/data:/root/quorumchain
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        geth --datadir /root/quorumchain init /root/quorumchain/genesis.json
+        geth \
+          --datadir /root/quorumchain \
+{% if consensus == "raft" %}
+          --raft \
+          --raftport {{ ports.raft }} \
+{% endif %}
+          --nodiscover \
+          --verbosity 5 \
+          --networkid {{ chainID }} \
+          --rpc 
+          --rpcaddr 0.0.0.0 
+          --rpcport {{ ports.rpc }} \
+          --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,{{ consensus }} \
+          --emitcheckpoints \
+          --port {{ ports.listen }}
+
