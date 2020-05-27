@@ -1,21 +1,29 @@
 genesis:
   chainID: 10000
   difficulty: "0x1"
-  gasLimit: "0xE0000000"
-  # alloc:
-  #   - id: "0xed9d02e382b34818e88b88a309c7fe71e65f419d"
-  #     balance: "1000000000000000000000000000"
-  #   - id: "0xed9d02e382b34818e88b88a309c7fe71e65f419e"
-  #     balance: "1000000000000000000000000000"
+  gasLimit: "0xe0000000"
   alloc:
-    - id: "1caa7d975a4de17781cbc37d2f6159315a93e3b3"
-      balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
-    - id: "6fb119c99de09959edc7a7e5af12999edfd6cf09"
-      balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
+  ### Raft
+    - id: "0xed9d02e382b34818e88b88a309c7fe71e65f419d"
+      balance: "1000000000000000000000000000"
+    - id: "0xed9d02e382b34818e88b88a309c7fe71e65f419e"
+      balance: "1000000000000000000000000000"
+
+  ### Istanbul
+  #   - id: "189d23d201b03ae1cf9113672df29a5d672aefa3"
+  #     balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
+  #   - id: "44b07d2c28b8ed8f02b45bd84ac7d9051b3349e6"
+  #     balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
+  #   - id: "4c1ccd426833b9782729a212c857f2f03b7b4c0d"
+  #     balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
+  #   - id: "7ae555d0f6faad7930434abdaac2274fd86ab516"
+  #     balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
+  #   - id: "c1056df7c02b6f1a353052eaf0533cc7cb743b52"
+  #     balance: "0x446c3b15f9926687d2c40534fdb564000000000000"
 
 quorum:
   # Selection consensus mechanism: istanbul or raft
-  consensus: istanbul
+  consensus: raft
   # Docker container image
   image: quorumengineering/quorum:2.5.0
   # Logging verbosity: 0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail

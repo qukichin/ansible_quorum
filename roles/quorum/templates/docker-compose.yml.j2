@@ -5,7 +5,6 @@ services:
     container_name: quorum-{{ ident }}
     hostname: quorum-{{ ident }}
     restart: always
-    # network_mode: host
     ports:
       - {{ quorum.ports.listen }}:{{ quorum.ports.listen }}
       - {{ quorum.ports.raft }}:{{ quorum.ports.raft }}
