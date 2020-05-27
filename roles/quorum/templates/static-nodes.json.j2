@@ -1,0 +1,7 @@
+[
+{% for item in play_hosts %}
+    "enode://{{ hostvars[item].public_key }}@{{ item }}:{{ quorum.ports.listen }}?discport=0{% if quorum.consensus == "raft" %}&raftport={{ quorum.ports.raft }}{% endif %}"{% if not loop.last %},{% endif %}
+
+{% endfor %}
+]
+

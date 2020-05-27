@@ -1,0 +1,60 @@
+- name: "Execute the generator"
+  shell: /usr/local/bin/generator
+  register: result
+  # 如果 /usr/local/bin/generator 命令的返回值不是两行的话，就重新执行
+  until: result.stdout_lines | length == 2
+  retries: 1
+  delay: 10
+
+- debug:
+    msg: "{{ result }} -> {{ result.stdout_lines | length }}"
+
+- name: "sleep for 2 seconds and continue with play"
+  wait_for:
+    timeout: 2
+
+- name: "Get the secret key"
+  set_fact:
+    private_key: "{{ result.stdout_lines[0][2:] }}"
+    public_key: "{{ result.stdout_lines[1][2:] }}"
+
+- when: private_key | length == 64 and public_key | length == 128
+  debug:
+    msg: "
+        {{ private_key }}
+        {{ public_key }}
+    "
+
+- set_fact:
+    ident: "{{ ansible_host.split('.') | join('-') }}"
+
+- name: "Create a configuration directory"
+  file:
+    state: directory
+    path: "/opt/quorum-{{ ident }}/data/geth"
+
+- name: "Create the node private key file"
+  shell:
+    creates: "/opt/quorum-{{ ident }}/data/geth/nodekey"
+    cmd: "printf {{ private_key }} > /opt/quorum-{{ ident }}/data/geth/nodekey" 
+
+- name: "Copy the raft genesis.json file"
+  when: quorum.consensus == "raft"
+  template:
+    force: no 
+    src: raft-genesis.json.j2 
+    dest: "/opt/quorum-{{ ident }}/data/genesis.json"
+
+- name: "Copy the istanbul genesis.json file"
+  when: quorum.consensus == "istanbul"
+  template:
+    force: no 
+    src: istanbul-genesis.json.j2
+    dest: "/opt/quorum-{{ ident }}/data/genesis.json"
+
+- name: "Copy the static-nodes.json file"
+  template:
+    force: no 
+    src: static-nodes.json.j2
+    dest: "/opt/quorum-{{ ident }}/data/static-nodes.json"
+

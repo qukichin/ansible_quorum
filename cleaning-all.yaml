@@ -1,0 +1,29 @@
+---
+- hosts: quorum
+  tasks:
+
+    - name: "Delelte the containers"
+      ignore_errors: True
+      loop:
+        - docker stop `docker ps -qa`
+        - docker rm `docker ps -qa`
+        - docker volume prune -f
+      shell:
+        cmd: "{{ item }}"
+
+    - set_fact:
+        ident: "{{ ansible_host.split('.') | join('-') }}"
+
+    - name: "Delete the /opt/quorum directory"
+      ignore_errors: True
+      file:
+        state: absent
+        path: /opt/quorum-{{ ident }} 
+
+    - name: "Delete the /usr/local/bin/generator"
+      ignore_errors: True
+      file:
+        state: absent
+        path: /usr/local/bin/generator
+      
+

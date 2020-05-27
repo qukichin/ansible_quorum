@@ -1,4 +1,6 @@
 - import_tasks: copy-generator.yml
 
-- import_tasks: create_dependency.yaml
+- import_tasks: create_dependency.yml
+
+- import_tasks: starting-quorum.yml
 

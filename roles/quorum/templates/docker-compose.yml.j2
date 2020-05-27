@@ -1,13 +1,17 @@
 version: "3"
 services:
   quorum-{{ ident }}:
-    image: {{ image }}
+    image: {{ quorum.image }}
     container_name: quorum-{{ ident }}
     hostname: quorum-{{ ident }}
     restart: always
-    network_mode: host
+    # network_mode: host
+    ports:
+      - {{ quorum.ports.listen }}:{{ quorum.ports.listen }}
+      - {{ quorum.ports.raft }}:{{ quorum.ports.raft }}
+      - {{ quorum.ports.rpc }}:{{ quorum.ports.rpc }}
     environment:
-{% for i in env %}
+{% for i in quorum.env %}
       - {{ i }}
 {% endfor %}
     volumes:
@@ -20,17 +24,22 @@ services:
         geth --datadir /root/quorumchain init /root/quorumchain/genesis.json
         geth \
           --datadir /root/quorumchain \
-{% if consensus == "raft" %}
+{% if quorum.consensus == "raft" %}
           --raft \
-          --raftport {{ ports.raft }} \
+          --raftport {{ quorum.ports.raft }} \
+{% elif quorum.consensus == "istanbul" %}
+          --istanbul.blockperiod 5 \
+          --syncmode full \
+          --mine \
+          --minerthreads 1 \
 {% endif %}
           --nodiscover \
-          --verbosity 5 \
-          --networkid {{ chainID }} \
-          --rpc 
-          --rpcaddr 0.0.0.0 
-          --rpcport {{ ports.rpc }} \
-          --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,{{ consensus }} \
+          --verbosity {{ quorum.verbosity }} \
+          --networkid {{ genesis.chainID }} \
+          --rpc \
+          --rpcaddr 0.0.0.0 \
+          --rpcport {{ quorum.ports.rpc }} \
+          --rpcapi admin,db,eth,debug,miner,net,shh,txpool,personal,web3,quorum,{{ quorum.consensus }} \
           --emitcheckpoints \
-          --port {{ ports.listen }}
+          --port {{ quorum.ports.listen }}
 
