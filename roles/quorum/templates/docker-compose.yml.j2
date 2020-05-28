@@ -21,6 +21,10 @@ services:
       - -c
       - |
         geth --datadir /root/quorumchain init /root/quorumchain/genesis.json
+
+        # Print
+        seq -s "+" 100 |tr -d '[:digit:]'
+
         geth \
           --datadir /root/quorumchain \
 {% if quorum.consensus == "raft" %}

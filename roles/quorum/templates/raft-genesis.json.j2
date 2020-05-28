@@ -1,10 +1,8 @@
-### Raft
-
 {
         "alloc": {
-{% for item in genesis.alloc %}
-                "{{ item["id"] }}": {
-                        "balance": "{{ item["balance"] }}"
+{% for item in play_hosts %}
+                "{{ hostvars[item].public_address }}": {
+                        "balance": "{{ genesis.alloc.balance }}"
                 }{% if not loop.last %},{% endif %}
 
 {% endfor %}

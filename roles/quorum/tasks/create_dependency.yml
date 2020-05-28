@@ -2,28 +2,37 @@
   shell: /usr/local/bin/generator
   register: result
   # 如果 /usr/local/bin/generator 命令的返回值不是两行的话，就重新执行
-  until: result.stdout_lines | length == 2
-  retries: 1
-  delay: 10
+  until: result.stdout_lines | length == 4
+  retries: 5
+  delay: 5
 
 - debug:
     msg: "{{ result }} -> {{ result.stdout_lines | length }}"
 
-- name: "sleep for 2 seconds and continue with play"
+- name: "sleep for 1 seconds and continue with play"
   wait_for:
-    timeout: 2
+    timeout: 1 
 
 - name: "Get the secret key"
   set_fact:
     private_key: "{{ result.stdout_lines[0][2:] }}"
     public_key: "{{ result.stdout_lines[1][2:] }}"
+    private_address: "{{ result.stdout_lines[2] }}"
+    public_address: "{{ result.stdout_lines[3] }}"
 
 - when: private_key | length == 64 and public_key | length == 128
   debug:
     msg: "
         {{ private_key }}
         {{ public_key }}
+        {{ private_address }}
+        {{ public_address }}
     "
+
+- shell:
+    cmd: |
+         echo "{{ private_address }}" > /tmp/.node_address
+         echo "{{ public_address }}" >> /tmp/.node_address
 
 - set_fact:
     ident: "{{ ansible_host.split('.') | join('-') }}"
