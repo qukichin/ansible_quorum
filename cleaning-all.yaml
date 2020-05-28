@@ -22,8 +22,11 @@
 
     - name: "Delete the /usr/local/bin/generator"
       ignore_errors: True
+      loop:
+        - /usr/local/bin/generator
+        - /usr/local/bin/extratool
       file:
         state: absent
-        path: /usr/local/bin/generator
+        path: "{{ item }}"
       
 

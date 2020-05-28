@@ -4,3 +4,8 @@
     dest: /usr/local/bin/generator
     mode: 777
 
+- name: "Copy extratool to host"
+  copy:
+    src: extratool
+    dest: /usr/local/bin/extratool
+    mode: 777

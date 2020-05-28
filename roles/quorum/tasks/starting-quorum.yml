@@ -3,8 +3,8 @@
     src: docker-compose.yml.j2
     dest: /opt/quorum-{{ ident }}/docker-compose.yml 
 
-# - name: "Start quorum container"
-#   shell:
-#     chdir: /opt/quorum-{{ ident }}
-#     cmd: docker-compose up -d
+- name: "Start quorum container"
+  shell:
+    chdir: /opt/quorum-{{ ident }}
+    cmd: docker-compose up -d
 

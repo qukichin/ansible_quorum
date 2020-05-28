@@ -34,6 +34,32 @@
          echo "{{ private_address }}" > /tmp/.node_address
          echo "{{ public_address }}" >> /tmp/.node_address
 
+- when: quorum.consensus == "istanbul"
+  set_fact: 
+    addresses: []
+
+- when: quorum.consensus == "istanbul"
+  loop: "{{ play_hosts }}" 
+  set_fact:
+    addresses: "{{ 
+        addresses + [hostvars[item].public_address]
+    }}"
+
+
+- when: quorum.consensus == "istanbul"
+  set_fact: 
+    quorumaddresses: "{{ addresses | join(' ') }}"
+
+- when: quorum.consensus == "istanbul"
+  shell: "/usr/local/bin/extratool {{ quorumaddresses }}" 
+  register: extraData
+
+- set_fact:
+    extraData: "{{ extraData.stdout }}"
+
+- debug:
+    msg: "{{ extraData }}"
+
 - set_fact:
     ident: "{{ ansible_host.split('.') | join('-') }}"
 
