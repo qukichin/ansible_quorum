@@ -45,7 +45,6 @@
         addresses + [hostvars[item].public_address]
     }}"
 
-
 - when: quorum.consensus == "istanbul"
   set_fact: 
     quorumaddresses: "{{ addresses | join(' ') }}"
@@ -78,20 +77,17 @@
 - name: "Copy the raft genesis.json file"
   when: quorum.consensus == "raft"
   template:
-    force: no 
     src: raft-genesis.json.j2 
     dest: "/opt/quorum-{{ ident }}/data/genesis.json"
 
 - name: "Copy the istanbul genesis.json file"
   when: quorum.consensus == "istanbul"
   template:
-    force: no 
     src: istanbul-genesis.json.j2
     dest: "/opt/quorum-{{ ident }}/data/genesis.json"
 
 - name: "Copy the static-nodes.json file"
   template:
-    force: no 
     src: static-nodes.json.j2
     dest: "/opt/quorum-{{ ident }}/data/static-nodes.json"
 
