@@ -1,7 +1,7 @@
 - name: "Execute the generator"
   shell: /usr/local/bin/generator
   register: result
-  # 如果 /usr/local/bin/generator 命令的返回值不是两行的话，就重新执行
+  # 如果 /usr/local/bin/generator 命令的返回值不是 4 行的话，就重新执行
   until: result.stdout_lines | length == 4
   retries: 5
   delay: 5
@@ -54,10 +54,12 @@
   shell: "/usr/local/bin/extratool {{ quorumaddresses }}" 
   register: extraData
 
-- set_fact:
+- when: quorum.consensus == "istanbul"
+  set_fact:
     extraData: "{{ extraData.stdout }}"
-
-- debug:
+  
+- when: quorum.consensus == "istanbul"
+  debug:
     msg: "{{ extraData }}"
 
 - set_fact:

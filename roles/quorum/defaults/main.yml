@@ -7,7 +7,7 @@ genesis:
 
 quorum:
   # Selection consensus mechanism: istanbul or raft
-  consensus: istanbul
+  consensus: raft
   # Docker container image
   image: quorumengineering/quorum:2.5.0
   # Logging verbosity: 0=silent, 1=error, 2=warn, 3=info, 4=debug, 5=detail
